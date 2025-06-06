@@ -77,7 +77,7 @@ export const buildInputSchemaField = (props?: {
 export const inputSchemaField = buildInputSchemaField();
 
 export const promptTypeOptions: INodeProperties = {
-	displayName: 'Source for Prompt (User Message)',
+	displayName: 'Source for Input (User Message)',
 	name: 'promptType',
 	type: 'options',
 	options: [
@@ -97,7 +97,7 @@ export const promptTypeOptions: INodeProperties = {
 };
 
 export const textInput: INodeProperties = {
-	displayName: 'Prompt (User Message)',
+	displayName: 'This is user\'s input',
 	name: 'text',
 	type: 'string',
 	required: true,
@@ -186,39 +186,5 @@ export const planAndExecuteAgentProperties: INodeProperties[] = [
 				},
 			},
 		],
-	},
+	},		
 ];
-
-export const pluginsTypeProperties: INodeProperties = {
-	displayName: 'Blockchain Plugin',
-	name: 'plugins',
-	type: 'multiOptions',
-	options: [
-		{
-			name: 'Bridge',
-			value: 'binkBridge',
-			description: 'Action bridge token A to token B using BinkAgent Plugin',
-		},
-		{
-			name: 'Search Token Info',
-			value: 'binkToken',
-			description: 'Search for token info on Bink Agent Plugin',
-		},
-		{
-			name: 'Staking',
-			value: 'binkStaking',
-			description: 'Stake and Unstake tokens on Bink Agent Plugin',
-		},
-		{
-			name: 'Swap',
-			value: 'binkSwap',
-			description: 'Action swap token A to token B using BinkAgent Plugin',
-		},
-		{
-			name: 'Wallet',
-			value: 'binkWallet',
-			description: 'Manage your Bink Agent Plugin Wallet',
-		},
-	],
-	default: [],
-};

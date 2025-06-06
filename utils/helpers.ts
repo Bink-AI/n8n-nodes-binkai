@@ -5,6 +5,7 @@ import type { BaseMessage } from '@langchain/core/messages';
 import type { Tool } from '@langchain/core/tools';
 import { Toolkit } from 'langchain/agents';
 import type { BaseChatMemory } from 'langchain/memory';
+import type { INodeType } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, jsonStringify } from 'n8n-workflow';
 import type {
 	AiEvent,
@@ -16,6 +17,11 @@ import type {
 } from 'n8n-workflow';
 
 import { N8nTool } from './N8nTool';
+import { OnchainToolName, ToolName } from './toolName';
+import { ToolToken } from '../nodes/tools/ToolToken/ToolToken.node';
+import { ToolSwap } from '../nodes/tools/ToolSwap/ToolSwap.node';
+import { ToolWallet } from '../nodes/tools/ToolWallet/ToolWallet.node';
+import { ToolBridge } from '../nodes/tools/ToolBridge/ToolBridge.node';
 
 function hasMethods<T>(obj: unknown, ...methodNames: Array<string | symbol>): obj is T {
 	return methodNames.every(
@@ -185,6 +191,9 @@ export function escapeSingleCurlyBrackets(text?: string): string | undefined {
 	return result;
 }
 
+
+
+
 export const getConnectedTools = async (
 	ctx: IExecuteFunctions | IWebhookFunctions,
 	enforceUniqueNames: boolean,
@@ -206,10 +215,36 @@ export const getConnectedTools = async (
 
 	const seenNames = new Set<string>();
 
-	const finalTools: Tool[] = [];
+	const finalTools: Array<{ tool: Tool, plugin?: any }> = [];
 
 	for (const tool of connectedTools) {
 		const { name } = tool;
+		let plugin: any;
+		
+		// Use a switch statement for better performance and readability
+		switch (name) {
+			case OnchainToolName.TOKEN_TOOL: {
+				const toolToken = new ToolToken();
+				plugin = await toolToken.getTokenPlugin();
+				break;
+			}
+			case OnchainToolName.SWAP_TOOL: {
+				const toolSwap = new ToolSwap();
+				plugin = await toolSwap.getSwapPlugin();
+				break;
+			}
+			case OnchainToolName.WALLET_TOOL: {
+				const toolWallet = new ToolWallet();
+				plugin = await toolWallet.getWalletPlugin();
+				break;
+			}
+			case OnchainToolName.BRIDGE_TOOL: {
+				const toolBridge = new ToolBridge();
+				plugin = await toolBridge.getBridgePlugin();
+				break;
+			}
+		}
+
 		if (seenNames.has(name)) {
 			throw new NodeOperationError(
 				ctx.getNode(),
@@ -223,12 +258,11 @@ export const getConnectedTools = async (
 		}
 
 		if (convertStructuredTool && tool instanceof N8nTool) {
-			finalTools.push(tool.asDynamicTool());
+			finalTools.push({ tool: tool.asDynamicTool(), plugin: plugin });
 		} else {
-			finalTools.push(tool);
+			finalTools.push({ tool: tool, plugin: plugin });
 		}
 	}
-
 	return finalTools;
 };
 

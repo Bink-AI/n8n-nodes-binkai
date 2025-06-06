@@ -7,12 +7,15 @@ import type { ToolsAgentAction } from 'langchain/dist/agents/tool_calling/output
 import type { BaseChatMemory } from 'langchain/memory';
 import { DynamicStructuredTool, type Tool } from 'langchain/tools';
 import { BINARY_ENCODING, jsonParse, NodeConnectionType, NodeOperationError } from 'n8n-workflow';
-import type { IExecuteFunctions } from 'n8n-workflow';
+import type { IExecuteFunctions, ISupplyDataFunctions } from 'n8n-workflow';
 import type { ZodObject } from 'zod';
 import { z } from 'zod';
 
 import { isChatInstance, getConnectedTools } from './helpers';
 import { type N8nOutputParser } from './output_parsers/N8nOutputParser';
+import { ToolToken } from '../nodes/tools/ToolToken/ToolToken.node';
+import { ToolName } from './toolName';
+import { ToolSwap } from '../nodes/tools/ToolSwap/ToolSwap.node';
 /* -----------------------------------------------------------
    Output Parser Helper
 ----------------------------------------------------------- */
@@ -299,23 +302,42 @@ export async function getOptionalMemory(
 export async function getTools(
 	ctx: IExecuteFunctions,
 	outputParser?: N8nOutputParser,
-): Promise<Array<DynamicStructuredTool | Tool>> {
-	const tools = (await getConnectedTools(ctx, true, false)) as Array<DynamicStructuredTool | Tool>;
+): Promise<Array<{ tool: DynamicStructuredTool | Tool, plugin?: any }>> {
+	const toolsWithPlugins = await getConnectedTools(ctx, true, false) as Array<{ tool: DynamicStructuredTool | Tool, plugin?: any }>;
+	// const result: Array<{ tool: DynamicStructuredTool | Tool, plugin?: any }> = [];
+	// for (const item of toolsWithPlugins) {
+	// 	const tool = 'tool' in item ? item.tool : item;
+	// 	if (tool.name === ToolName.TOKEN_TOOL) {
+	// 		const toolToken = new ToolToken();
+	// 		const tokenPlugin = await toolToken.getTokenPlugin();
+	// 		result.push({ tool, plugin: tokenPlugin });
+	// 	}
+	// 	if (tool.name === ToolName.SWAP_TOOL) {
+	// 		try {
+	// 			const toolSwap = new ToolSwap();
+	// 			const swapPlugin = await toolSwap.getSwapPlugin();
+	// 			result.push({ tool, plugin: swapPlugin });
+	// 		} catch (error) {
+	// 			console.log(error)
+	// 		}
+	// 	}
+	// 	result.push({ tool, plugin: 'plugin' in item ? item.plugin : undefined });
+	// }
 
-	// If an output parser is available, create a dynamic tool to validate the final output.
-	if (outputParser) {
-		const schema = getOutputParserSchema(outputParser);
-		const structuredOutputParserTool = new DynamicStructuredTool({
-			schema,
-			name: 'format_final_json_response',
-			description:
-				'Use this tool to format your final response to the user in a structured JSON format. This tool validates your output against a schema to ensure it meets the required format. ONLY use this tool when you have completed all necessary reasoning and are ready to provide your final answer. Do not use this tool for intermediate steps or for asking questions. The output from this tool will be directly returned to the user.',
-			// We do not use a function here because we intercept the output with the parser.
-			func: async () => '',
-		});
-		tools.push(structuredOutputParserTool);
-	}
-	return tools;
+	// if (outputParser) {
+	// 	const schema = getOutputParserSchema(outputParser);
+	// 	const structuredOutputParserTool = new DynamicStructuredTool({
+	// 		schema,
+	// 		name: 'format_final_json_response',
+	// 		description:
+	// 			'Use this tool to format your final response to the user in a structured JSON format. This tool validates your output against a schema to ensure it meets the required format. ONLY use this tool when you have completed all necessary reasoning and are ready to provide your final answer. Do not use this tool for intermediate steps or for asking questions. The output from this tool will be directly returned to the user.',
+	// 		// We do not use a function here because we intercept the output with the parser.
+	// 		func: async () => '',
+	// 	});
+	// 	tools.push(structuredOutputParserTool);
+	// }
+    
+	return toolsWithPlugins;
 }
 
 /**
