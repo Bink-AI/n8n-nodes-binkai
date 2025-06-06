@@ -77,7 +77,7 @@ export const buildInputSchemaField = (props?: {
 export const inputSchemaField = buildInputSchemaField();
 
 export const promptTypeOptions: INodeProperties = {
-	displayName: 'Source for Prompt (User Message)',
+	displayName: 'Source for Input (User Message)',
 	name: 'promptType',
 	type: 'options',
 	options: [
@@ -97,7 +97,7 @@ export const promptTypeOptions: INodeProperties = {
 };
 
 export const textInput: INodeProperties = {
-	displayName: 'Prompt (User Message)',
+	displayName: 'This is user\'s input',
 	name: 'text',
 	type: 'string',
 	required: true,

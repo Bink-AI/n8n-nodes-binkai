@@ -10,7 +10,7 @@ import {
 	jsonParse,
 	NodeConnectionType,
 } from 'n8n-workflow';
-import { textInput } from '../../utils/descriptions';
+import { promptTypeOptions, textInput } from '../../utils/descriptions';
 import {
 	getOptionalOutputParser,
 	N8nOutputParser,
@@ -148,25 +148,6 @@ const agentTypeProperty: INodeProperties = {
 	default: 'toolsAgent',
 };
 
-export const promptTypeOptions: INodeProperties = {
-	displayName: 'Source for Prompt (User Message)',
-	name: 'promptType',
-	type: 'options',
-	options: [
-		{
-			name: 'Connected Chat Trigger Node',
-			value: 'auto',
-			description:
-				"Looks for an input field called 'chatInput' that is coming from a directly connected Chat Trigger",
-		},
-		{
-			name: 'Define Below',
-			value: 'define',
-			description: 'Use an expression to reference data in previous nodes or enter static text',
-		},
-	],
-	default: 'auto',
-};
 
 export const toolsAgentProperties: INodeProperties[] = [
 	{

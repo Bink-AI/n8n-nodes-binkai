@@ -17,7 +17,7 @@ import type {
 } from 'n8n-workflow';
 
 import { N8nTool } from './N8nTool';
-import { ToolName } from './toolName';
+import { OnchainToolName, ToolName } from './toolName';
 import { ToolToken } from '../nodes/tools/ToolToken/ToolToken.node';
 import { ToolSwap } from '../nodes/tools/ToolSwap/ToolSwap.node';
 import { ToolWallet } from '../nodes/tools/ToolWallet/ToolWallet.node';
@@ -223,22 +223,22 @@ export const getConnectedTools = async (
 		
 		// Use a switch statement for better performance and readability
 		switch (name) {
-			case ToolName.TOKEN_TOOL: {
+			case OnchainToolName.TOKEN_TOOL: {
 				const toolToken = new ToolToken();
 				plugin = await toolToken.getTokenPlugin();
 				break;
 			}
-			case ToolName.SWAP_TOOL: {
+			case OnchainToolName.SWAP_TOOL: {
 				const toolSwap = new ToolSwap();
 				plugin = await toolSwap.getSwapPlugin();
 				break;
 			}
-			case ToolName.WALLET_TOOL: {
+			case OnchainToolName.WALLET_TOOL: {
 				const toolWallet = new ToolWallet();
 				plugin = await toolWallet.getWalletPlugin();
 				break;
 			}
-			case ToolName.BRIDGE_TOOL: {
+			case OnchainToolName.BRIDGE_TOOL: {
 				const toolBridge = new ToolBridge();
 				plugin = await toolBridge.getBridgePlugin();
 				break;

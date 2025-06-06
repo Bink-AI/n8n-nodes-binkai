@@ -11,7 +11,7 @@ import {
 import { logWrapper } from '../../../utils/logWrapper';
 import { getConnectionHintNoticeField } from '../../../utils/sharedFields';
 import { DynamicTool } from '@langchain/core/tools';
-import { ToolName } from '../../../utils/toolName';
+import { OnchainToolName } from '../../../utils/toolName';
 import { SupportChain } from '../../../utils/networks';
 import { SwapPlugin } from '@binkai/swap-plugin';
 import { KyberProvider } from '@binkai/kyber-provider';
@@ -65,8 +65,8 @@ const solanaPotocolsTypeProperties: INodeProperties[] = [
 
 export class ToolSwap implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Swap Tool for BinkAI',
-		name: ToolName.SWAP_TOOL,
+		displayName: 'Bink AI Swap Tool',
+		name: OnchainToolName.SWAP_TOOL,
 		icon: 'file:../../icons/swap_bink_ai.svg',
 		iconColor: 'black',
 		group: ['transform'],
@@ -188,7 +188,7 @@ export class ToolSwap implements INodeType {
 		});
 		ToolSwap.swapPlugin = swapPlugin;
 		const tool = new DynamicTool({
-			name: ToolName.SWAP_TOOL,
+			name: OnchainToolName.SWAP_TOOL,
 			description: 'Swap tool for BinkAI',
 			func: async (subject: string) => {
 				return subject;

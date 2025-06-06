@@ -11,7 +11,7 @@ import {
 import { logWrapper } from '../../../utils/logWrapper';
 import { getConnectionHintNoticeField } from '../../../utils/sharedFields';
 import { DynamicTool } from '@langchain/core/tools';
-import { ToolName } from '../../../utils/toolName';
+import { OnchainToolName } from '../../../utils/toolName';
 import { deBridgeProvider } from '@binkai/debridge-provider';
 import { BridgePlugin } from '@binkai/bridge-plugin';
 import { SupportChain } from '../../../utils/networks';
@@ -55,8 +55,8 @@ const solanaBridgeProvider: INodeProperties[] = [
 
 export class ToolBridge implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Bridge Tool for BinkAI',
-		name: ToolName.BRIDGE_TOOL,
+		displayName: 'Bink AI Bridge Tool',
+		name: OnchainToolName.BRIDGE_TOOL,
 		icon: 'file:../../icons/bridge_bink_ai.svg',
 		iconColor: 'black',
 		group: ['transform'],
@@ -152,7 +152,7 @@ export class ToolBridge implements INodeType {
 		ToolBridge.bridgePlugin = bridgePlugin;
 
 		const tool = new DynamicTool({
-			name: ToolName.BRIDGE_TOOL,
+			name: OnchainToolName.BRIDGE_TOOL,
 			description: 'Bridge tool for BinkAI',
 			func: async (subject: string) => {
 				return subject;

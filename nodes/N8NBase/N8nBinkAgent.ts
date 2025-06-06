@@ -18,7 +18,7 @@ import { BaseChatMemory } from '@langchain/community/memory/chat_memory';
 import { N8nOutputParser } from '../../utils/output_parsers/N8nOutputParser';
 import { getAgentTracingConfig } from '../../utils/tracing';
 import { PlanAndExecuteAgentExecutor } from 'langchain/experimental/plan_and_execute';
-import { AgentType, ToolName } from '../../utils/toolName';
+import { AgentType, OnchainToolName } from '../../utils/toolName';
 
 export class N8nBinkAgent extends BaseAgent {
 	private model: IModel;
@@ -74,10 +74,10 @@ export class N8nBinkAgent extends BaseAgent {
 
 		const filteredTools = this.tools.filter(
 			(tool) =>
-				tool.name !== ToolName.SWAP_TOOL &&
-				tool.name !== ToolName.BRIDGE_TOOL &&
-				tool.name !== ToolName.TOKEN_TOOL &&
-				tool.name !== ToolName.WALLET_TOOL,
+				tool.name !== OnchainToolName.SWAP_TOOL &&
+				tool.name !== OnchainToolName.BRIDGE_TOOL &&
+				tool.name !== OnchainToolName.TOKEN_TOOL &&
+				tool.name !== OnchainToolName.WALLET_TOOL,
 		);
 
 		if (this.memory && this.memory.chatHistory) {
@@ -120,10 +120,10 @@ export class N8nBinkAgent extends BaseAgent {
 	protected async createPlanningAgentExecutor(): Promise<any> {
 		const filteredTools = this.tools.filter(
 			(tool) =>
-				tool.name !== ToolName.SWAP_TOOL &&
-				tool.name !== ToolName.BRIDGE_TOOL &&
-				tool.name !== ToolName.TOKEN_TOOL &&
-				tool.name !== ToolName.WALLET_TOOL,
+				tool.name !== OnchainToolName.SWAP_TOOL &&
+				tool.name !== OnchainToolName.BRIDGE_TOOL &&
+				tool.name !== OnchainToolName.TOKEN_TOOL &&
+				tool.name !== OnchainToolName.WALLET_TOOL,
 		);
 
 		const agentExecutor = await PlanAndExecuteAgentExecutor.fromLLMAndTools({

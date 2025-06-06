@@ -10,7 +10,7 @@ import {
 import { logWrapper } from '../../../utils/logWrapper';
 import { getConnectionHintNoticeField } from '../../../utils/sharedFields';
 import { DynamicTool } from '@langchain/core/tools';
-import { ToolName } from '../../../utils/toolName';
+import { OnchainToolName } from '../../../utils/toolName';
 import { WalletPlugin } from '@binkai/wallet-plugin';
 import { SupportChain } from '../../../utils/networks';
 import { AlchemyProvider } from '@binkai/alchemy-provider';
@@ -18,8 +18,8 @@ import { BirdeyeProvider } from '@binkai/birdeye-provider';
 
 export class ToolWallet implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Wallet Tool for BinkAI',
-		name: ToolName.WALLET_TOOL,
+		displayName: 'Bink AI Wallet Management Tool',
+		name: OnchainToolName.WALLET_TOOL,
 		icon: 'file:../../icons/wallet_bink_ai.svg',
 		iconColor: 'black',
 		group: ['transform'],
@@ -93,7 +93,7 @@ export class ToolWallet implements INodeType {
 		});
 		ToolWallet.walletPlugin = walletPlugin;
 		const tool = new DynamicTool({
-			name: ToolName.WALLET_TOOL,
+			name: OnchainToolName.WALLET_TOOL,
 			description: 'Wallet tool for BinkAI',
 			func: async (subject: string) => {
 				return subject;
